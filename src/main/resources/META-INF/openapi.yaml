@@ -1,0 +1,73 @@
+openapi: '3.0.0'
+info:
+  version: 'v1'
+  title: 'Swedish Holidays API'
+  description: Lookup dates for Swedish holidays
+
+paths:
+  /holidays/{year}:
+    parameters:
+      - name: year
+        description: Year
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/year'
+    get:
+      summary: Get holidays
+      responses:
+        200:
+          description: Holidays of the specified 'year'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/holidays'
+        400:
+          description: Year out of range (2000-2099)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    year:
+      description: Year
+      type: integer
+      minimum: 2000
+      maximum: 2099
+    holidays:
+      type: object
+      additionalProperties: true
+      example:
+        {
+          "2023-01-01": "Nyårsdagen",
+          "2023-01-06": "Trettondagen",
+          "2023-04-07": "Långfredagen",
+          "2023-04-09": "Påskdagen",
+          "2023-04-10": "Annandag påsk",
+          "2023-05-01": "Första maj",
+          "2023-05-18": "Kristi himmelsfärdsdag",
+          "2023-05-28": "Pingstdagen",
+          "2023-06-06": "Sveriges nationaldag och svenska flaggans dag",
+          "2023-06-23": "Midsommarafton",
+          "2023-06-24": "Midsommardagen",
+          "2023-11-04": "Alla helgons dag",
+          "2023-12-24": "Julafton",
+          "2023-12-25": "Juldagen",
+          "2023-12-26": "Annandag jul",
+          "2023-12-31": "Nyårsafton"
+        }
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: A human readable error message
+          type: string
